@@ -1,5 +1,5 @@
 // Variavel para a URL da API
-const url = "http://servicodados.ibge.gov.br/api/v3/noticias";
+const url = "https://servicodados.ibge.gov.br/api/v3/noticias";
 
 // Variáveis para os elementos do filtro
 const filtro = document.querySelector(".icone-filtro  ");
