@@ -1,0 +1,158 @@
+header {
+  background-color: #4682b4;
+}
+
+header h1 {
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+}
+
+.filtros {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-pesquisa {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.input-pesquisa form {
+  position: relative;
+  width: 60vw;
+}
+
+.input-pesquisa input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  padding-right: 40px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  border: 1px solid transparent;
+}
+
+.input-pesquisa input[type="text"]:focus {
+  border-color: #00ff00;
+}
+
+.input-pesquisa button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 40px;
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+  outline: none;
+  border-radius: 0 25px 25px 0;
+}
+
+.icone-filtro-container {
+  position: absolute;
+  right: 20px;
+}
+
+.icone-filtro {
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.icone-filtro-contador {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background-color: #f0f0f0;
+  color: gray;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.dialog-filtro {
+  position: fixed;
+  width: 50vw;
+  top: 50%;
+  left: 50%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.dialog-filtro form {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-fechar {
+  position: absolute;
+  border: none;
+  background: none;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.dialog-filtro-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.dialog-filtro-input {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+}
+
+.dialog-filtro-input label {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.dialog-filtro-input input,
+select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+.dialog-filtro button[type="submit"] {
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.dialog-filtro button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 600px) {
+  .dialog-filtro-row {
+    flex-direction: column;
+  }
+
+  .dialog-filtro-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
