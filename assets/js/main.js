@@ -31,6 +31,7 @@ let busca = inputBusca.value || "";
 formBusca.addEventListener("submit", (event) => {
   event.preventDefault();
 
+  paginaAtual = 1;
   busca = inputBusca.value;
 
   atualizarUrl();
