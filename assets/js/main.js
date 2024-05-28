@@ -7,7 +7,7 @@ const dialog = document.querySelector(".dialog-filtro");
 const dialogFechar = document.querySelector(".dialog-fechar");
 const dialogAplicar = document.querySelector(".dialog-filtro-aplicar");
 
-// Eventos para abrir e fechar o dialog de filtro
+// Eventos para abrir, fechar e aplicar o dialog de filtro
 dialogAplicar.addEventListener("click", () => {
   atualizarFiltros();
   dialog.close();
@@ -21,12 +21,13 @@ dialogFechar.addEventListener("click", () => {
   dialog.close();
 });
 
-// Variáveis para os campos de busca
+// Variáveis para o campo de busca
 const formBusca = document.querySelector(".form-busca");
 const inputBusca = formBusca.querySelector("input");
 let busca = inputBusca.value || "";
 
 // Evento para buscar as notícias quando o formulário de busca é submetido
+// Também é feito a atualização da url
 formBusca.addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -45,7 +46,12 @@ let ate = document.querySelector("#ate");
 // Variavel que armazena a UL que irá conter as notícias
 const listaNoticias = document.querySelector(".lista-noticias");
 
-// Função para criar o elemento da notícia
+// Variavel para a lista de paginas
+const listaPaginacao = document.querySelector(".lista-paginacao");
+let paginaAtual = 1;
+let totalPaginas = 1;
+
+// Função para criar o elemento da notícia LI
 function criarNoticia(noticia) {
   const li = document.createElement("li");
 
@@ -76,38 +82,39 @@ function criarNoticia(noticia) {
     window.open(noticia.link, "_blank");
   });
 
+  // Criar a estrutura da notícia
   const divNoticia = document.createElement("div");
   divNoticia.classList.add("noticia");
 
-  const divConteudo = document.createElement("div");
-  divConteudo.classList.add("conteudo");
+  const divNoticiaConteudo = document.createElement("div");
+  divNoticiaConteudo.classList.add("noticia-conteudo");
 
-  const divImagem = document.createElement("div");
-  divImagem.classList.add("conteudo-imagem");
+  const divNoticiaImagem = document.createElement("div");
+  divNoticiaImagem.classList.add("noticia-imagem");
 
-  const divInfo = document.createElement("div");
-  divInfo.classList.add("info");
+  const divConteudoInfo = document.createElement("div");
+  divConteudoInfo.classList.add("conteudo-info");
 
-  const divPublicado = document.createElement("div");
-  divPublicado.classList.add("publicado");
+  const divConteudoPublicado = document.createElement("div");
+  divConteudoPublicado.classList.add("conteudo-publicado");
 
   const divLeiaMais = document.createElement("div");
   divLeiaMais.classList.add("leia-mais");
 
-  divInfo.appendChild(titulo);
-  divInfo.appendChild(intro);
-  divPublicado.appendChild(editorias);
-  divPublicado.appendChild(publicado);
+  divConteudoInfo.appendChild(titulo);
+  divConteudoInfo.appendChild(intro);
+  divConteudoPublicado.appendChild(editorias);
+  divConteudoPublicado.appendChild(publicado);
   divLeiaMais.appendChild(botaoLeiaMais);
 
-  divConteudo.appendChild(divInfo);
-  divConteudo.appendChild(divPublicado);
-  divConteudo.appendChild(divLeiaMais);
+  divNoticiaConteudo.appendChild(divConteudoInfo);
+  divNoticiaConteudo.appendChild(divConteudoPublicado);
+  divNoticiaConteudo.appendChild(divLeiaMais);
 
-  divImagem.appendChild(imagem);
+  divNoticiaImagem.appendChild(imagem);
 
-  divNoticia.appendChild(divImagem);
-  divNoticia.appendChild(divConteudo);
+  divNoticia.appendChild(divNoticiaImagem);
+  divNoticia.appendChild(divNoticiaConteudo);
 
   li.appendChild(divNoticia);
 
@@ -135,6 +142,7 @@ function calcularDataPublicacao(data) {
 }
 
 // Função para atualizar as variáveis de filtro quando o dialog é aplicado
+// Também é feito a busca das notícias e a atualização da url
 function atualizarFiltros() {
   tipo = document.querySelector("#tipo");
   qtd = document.querySelector("#quantidade");
@@ -154,6 +162,7 @@ function atualizarUrl() {
   de.value !== "" && params.append("de", de.value);
   ate.value !== "" && params.append("ate", ate.value);
   params.append("qtd", qtd.value);
+  params.append("page", paginaAtual);
 
   window.history.pushState({}, "", `?${params}`);
 }
@@ -167,6 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
   qtd.value = urlParams.get("qtd") || 10;
   de.value = urlParams.get("de") || "";
   ate.value = urlParams.get("ate") || "";
+  paginaAtual = parseInt(urlParams.get("page")) || 1;
 
   if (busca !== "") {
     inputBusca.value = busca;
@@ -184,6 +194,7 @@ function buscarNoticias() {
   de.value !== "" && params.append("de", de.value);
   ate.value !== "" && params.append("ate", ate.value);
   params.append("qtd", qtd.value);
+  params.append("page", paginaAtual);
 
   fetch(`${url}?${params}`)
     .then((response) => response.json())
@@ -192,5 +203,111 @@ function buscarNoticias() {
       data.items.forEach((noticia) => {
         listaNoticias.appendChild(criarNoticia(noticia));
       });
+      totalPaginas = data.totalPages;
+      paginarNoticias();
     });
+}
+
+// Função para paginar as notícias e criar os botões de paginação
+function paginarNoticias() {
+  listaPaginacao.innerHTML = "";
+
+  const paginas = [];
+
+  for (let i = 1; i <= totalPaginas; i++) {
+    paginas.push(i);
+  }
+
+  let paginasVisiveis = [];
+
+  if (totalPaginas <= 10) {
+    paginasVisiveis = paginas;
+  } else {
+    let inicio = paginaAtual - 4;
+    let fim = paginaAtual + 5;
+
+    if (inicio < 1) {
+      inicio = 1;
+      fim = 10;
+    }
+
+    if (fim > totalPaginas) {
+      fim = totalPaginas;
+      inicio = totalPaginas - 9;
+    }
+
+    for (let i = inicio; i <= fim; i++) {
+      paginasVisiveis.push(i);
+    }
+  }
+
+  // Botão para primeira página
+  const primeiraPagina = document.createElement("li");
+  const botaoPrimeiraPagina = document.createElement("button");
+  botaoPrimeiraPagina.textContent = "<<";
+  botaoPrimeiraPagina.addEventListener("click", () => {
+    paginaAtual = 1;
+    buscarNoticias();
+    atualizarUrl();
+  });
+
+  primeiraPagina.appendChild(botaoPrimeiraPagina);
+  listaPaginacao.appendChild(primeiraPagina);
+
+  // Botão para página anterior
+  const paginaAnterior = document.createElement("li");
+  const botaoPaginaAnterior = document.createElement("button");
+  botaoPaginaAnterior.textContent = "<";
+  botaoPaginaAnterior.addEventListener("click", () => {
+    paginaAtual = paginaAtual - 1;
+    buscarNoticias();
+    atualizarUrl();
+  });
+
+  paginaAnterior.appendChild(botaoPaginaAnterior);
+  listaPaginacao.appendChild(paginaAnterior);
+
+  // Paginas que ficam visiveis
+  paginasVisiveis.forEach((pagina) => {
+    const li = document.createElement("li");
+    const botao = document.createElement("button");
+    botao.textContent = pagina;
+    botao.addEventListener("click", () => {
+      paginaAtual = pagina;
+      buscarNoticias();
+      atualizarUrl();
+    });
+    if (pagina === paginaAtual) {
+      botao.style.backgroundColor = "#4682b4";
+      botao.style.color = "#ffffff";
+    }
+    li.appendChild(botao);
+    listaPaginacao.appendChild(li);
+  });
+
+  // Botão para próxima página
+  const proximaPagina = document.createElement("li");
+  const botaoProximaPagina = document.createElement("button");
+  botaoProximaPagina.textContent = ">";
+  botaoProximaPagina.addEventListener("click", () => {
+    paginaAtual = paginaAtual + 1;
+    buscarNoticias();
+    atualizarUrl();
+  });
+
+  proximaPagina.appendChild(botaoProximaPagina);
+  listaPaginacao.appendChild(proximaPagina);
+
+  // Botão para última página
+  const ultimaPagina = document.createElement("li");
+  const botaoUltimaPagina = document.createElement("button");
+  botaoUltimaPagina.textContent = ">>";
+  botaoUltimaPagina.addEventListener("click", () => {
+    paginaAtual = totalPaginas;
+    buscarNoticias();
+    atualizarUrl();
+  });
+
+  ultimaPagina.appendChild(botaoUltimaPagina);
+  listaPaginacao.appendChild(ultimaPagina);
 }
