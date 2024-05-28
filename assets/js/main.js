@@ -149,6 +149,7 @@ function atualizarFiltros() {
   qtd = document.querySelector("#quantidade");
   de = document.querySelector("#de");
   ate = document.querySelector("#ate");
+  paginaAtual = 1;
 
   buscarNoticias();
   atualizarUrl();
