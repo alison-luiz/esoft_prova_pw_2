@@ -4,7 +4,7 @@ const url = "https://servicodados.ibge.gov.br/api/v3/noticias";
 // Variáveis para os elementos do filtro
 const filtro = document.querySelector(".icone-filtro  ");
 const dialog = document.querySelector(".dialog-filtro");
-const dialogFechar = document.querySelector(".dialog-fechar");
+const dialogFechar = document.querySelector(".dialog-filtro-fechar");
 const dialogAplicar = document.querySelector(".dialog-filtro-aplicar");
 
 // Eventos para abrir, fechar e aplicar o dialog de filtro

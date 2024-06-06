@@ -26,7 +26,7 @@ header h1 {
   width: 60vw;
 }
 
-.input-pesquisa input[type="text"] {
+.form-busca input {
   width: 100%;
   padding: 10px;
   padding-right: 40px;
@@ -37,11 +37,11 @@ header h1 {
   border: 1px solid transparent;
 }
 
-.input-pesquisa input[type="text"]:focus {
+.form-busca input:focus {
   border-color: #00ff00;
 }
 
-.input-pesquisa button {
+.form-busca button {
   position: absolute;
   right: 0;
   top: 0;
@@ -93,29 +93,15 @@ header h1 {
 }
 
 .dialog-filtro form {
-  display: flex;
-  flex-direction: column;
-}
-
-.dialog-fechar {
-  position: absolute;
-  border: none;
-  background: none;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
-}
-
-.dialog-filtro-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .dialog-filtro-input {
   display: flex;
   flex-direction: column;
-  width: 48%;
+  margin-bottom: 15px;
+  margin-right: 10px;
 }
 
 .dialog-filtro-input label {
@@ -132,7 +118,17 @@ select {
   outline: none;
 }
 
-.dialog-filtro button[type="submit"] {
+.dialog-filtro-fechar {
+  position: absolute;
+  border: none;
+  background: none;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.dialog-filtro-aplicar {
+  grid-column: 1 / 3;
   padding: 10px 20px;
   border: none;
   background-color: #007bff;
@@ -142,17 +138,13 @@ select {
   font-size: 16px;
 }
 
-.dialog-filtro button[type="submit"]:hover {
+.dialog-filtro-aplicar:hover {
   background-color: #0056b3;
 }
 
-@media (max-width: 600px) {
-  .dialog-filtro-row {
+@media (max-width: 730px) {
+  .dialog-filtro form {
+    display: flex;
     flex-direction: column;
-  }
-
-  .dialog-filtro-input {
-    width: 100%;
-    margin-bottom: 10px;
   }
 }
